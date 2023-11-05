@@ -3,35 +3,57 @@ package Controller;
 import View.SnakePanel;
 
 public class Score implements Runnable {
+    private int score;
+    private boolean running;
+    private boolean gameOver;
+    private boolean appleEaten; // Agrega una bandera para controlar si se ha comido una manzana
 
-    private SnakePanel snake;
-    int score = 0;
 
-    public Score(SnakePanel snake) {
-        this.snake = snake;
+    public Score(SnakePanel panel) {
+        this.score = 0;
+        this.running = true;
+        this.gameOver = false;
+        this.appleEaten = false;
     }
 
     @Override
     public void run() {
-
-        while (true) {
-            // Comprueba si la serpiente ha comido la manzana
-            int[] cabezaSerpiente = snake.snake.get(0);
-            if (cabezaSerpiente[0] == snake.apple[0] && cabezaSerpiente[1] == snake.apple[1]) {
-                // Aumenta la puntuación
-                score++;
-                // Genera una nueva manzana
-                snake.generatePoints();
-            }
-
-            // Duerme el hilo durante 100 milisegundos
+        while (running) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000); // Pausa el hilo durante un segundo
+
+                if (gameOver) {
+                    break; // Si el juego ha terminado, sal del bucle
+                }
+
+                if (appleEaten) {
+                    increaseScore(); // Aumenta la puntuación solo cuando se ha comido una manzana
+                    appleEaten = false; // Restablece la bandera
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public void stop() {
+        running = false;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void increaseScore() {
+        score++;
+    }
+    public void appleEaten() {
+        appleEaten = true;
+    }
+    public void setGameOver() {
+        gameOver = true;
+    }
+
     public String toString() {
         return "Puntuación: " + score;
     }
