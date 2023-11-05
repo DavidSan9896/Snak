@@ -2,9 +2,11 @@ package Controller;
 
 import View.SnakePanel;
 
+
 public class Move implements Runnable {
     SnakePanel snake;
     boolean status = true;
+
     public Move(SnakePanel panel) {
         this.snake = panel;
 
@@ -16,13 +18,14 @@ public class Move implements Runnable {
             snake.goTo();
             snake.repaint();
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-    public void stop(){
+    public void stopp(){
         this.status=false;
     }
 }
+

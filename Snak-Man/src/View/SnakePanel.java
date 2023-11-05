@@ -67,13 +67,17 @@ public class SnakePanel extends JPanel {
         int addx =0;
         int addy = 0;
         switch (address){
-            case "de": addx = 1;
+            case "de":
+                addx = 1;
                 break;
-            case "iz": addx = -1;
+            case "iz":
+                addx = -1;
                 break;
-            case "ar": addy = 1;
+            case "ar":
+                addy = -1;
                 break;
-            case "ab": addy = -1;
+            case "ab":
+                addy = 1;
                 break;
         }
         int [] neww={
@@ -87,12 +91,17 @@ public class SnakePanel extends JPanel {
             }
         }
         if (see){
+            move.stopp();
             JOptionPane.showMessageDialog(this,"Perdiste");
         }else{
             if (neww[0] == apple[0] && neww[1] == apple[1]){
                 snake.add(neww);
+                generatePoints();
+            }else {
+                snake.add(neww);
                 snake.remove(0);
             }
+
         }
     }
 
