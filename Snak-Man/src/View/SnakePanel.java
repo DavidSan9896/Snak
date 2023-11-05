@@ -155,16 +155,6 @@ public class SnakePanel extends JPanel {
     }
 
 
-    private boolean isApple(int[] apple) {
-        for (int[] cuerpo : snake) {
-            if (cuerpo[0] == apple[0] && cuerpo[1] == apple[1]) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * Cambia los movimientos
      * @param addr
