@@ -1,7 +1,9 @@
 package View;
 
 import Controller.Move;
+import Controller.ObstacleManager;
 import Controller.Score;
+import Model.Obstacle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +13,18 @@ import java.util.List;
 public class SnakePanel extends JPanel {
 
     Color snakeColor = Color.black;
-    int tammax, tam,can,res;
+    int tammax;
+    int tam;
+    public int can;
+    int res;
     public List <int[]> snake = new ArrayList<>();
     String  address = "de";
     String nearbyAddress = "de";
     Color appleColor= Color.red;
     public int [] apple = new int[2];
     Thread hilo;
-    Thread hilo2;
+    ObstacleManager obstacleManager;
+    Thread obstacleManagerThread;
     Move move;
     Score score;
 
@@ -32,16 +38,30 @@ public class SnakePanel extends JPanel {
         snake.add(a);
         snake.add(b);
         generatePoints();
+        starMove();
+        starScore();
+        startObstacleManager();
 
+
+    }
+
+    public void starMove(){
         move = new Move(this);
         hilo = new Thread(move);
         hilo.start();
 
-        score = new Score(this);
-        hilo2 = new Thread(score);
-        hilo2.start();
-
     }
+    public void starScore(){
+        score = new Score(this);
+        Thread hilo2 = new Thread(score);
+        hilo2.start();
+    }
+    public void startObstacleManager() {
+        obstacleManager = new ObstacleManager(this);
+        obstacleManagerThread = new Thread(obstacleManager);
+        obstacleManagerThread.start();
+    }
+
     /*
     Permite volvelo a pintar y borrar
      */
@@ -59,6 +79,11 @@ public class SnakePanel extends JPanel {
         //Marcador
         painter.setColor(Color.BLACK);
         painter.drawString("" + score, 700, 10);
+        //Obtaculo
+        painter.setColor(Color.gray);
+        for (Obstacle obstacle : obstacleManager.getObstacles()) {
+            painter.fillRect(res/2 + obstacle.getX() * tam, res/2 + obstacle.getY() * tam, tam - 1, tam - 1);
+        }
     }
 
     public void goTo(){
@@ -91,18 +116,22 @@ public class SnakePanel extends JPanel {
             }
         }
         if (see){
+            obstacleManager.checkCollision(neww[0], neww[1]);
+            score.setGameOver();
             move.stopp();
             JOptionPane.showMessageDialog(this,"Perdiste");
         }else{
             if (neww[0] == apple[0] && neww[1] == apple[1]){
                 snake.add(neww);
                 generatePoints();
+                score.increaseScore();
+
             }else {
                 snake.add(neww);
                 snake.remove(0);
             }
-
         }
+
     }
 
     /**
@@ -123,6 +152,17 @@ public class SnakePanel extends JPanel {
             this.apple[0] = a;
             this.apple[1] = b;
         }
+    }
+
+
+    private boolean isApple(int[] apple) {
+        for (int[] cuerpo : snake) {
+            if (cuerpo[0] == apple[0] && cuerpo[1] == apple[1]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
