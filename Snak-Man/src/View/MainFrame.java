@@ -29,7 +29,11 @@ public class MainFrame extends JFrame {
             }
         });
 
-        JLabel info = new JLabel("Creado por: [David Cubillos ]");
+        JLabel info = new JLabel("Creado por: [David Cubillos]\n" +
+                " Cod: 201924817\n " +
+                " Ing\n " +
+                " Sistemas y Computación\n " +
+                " 2023 ");
         info.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Configurar GridBagConstraints para los componentes
